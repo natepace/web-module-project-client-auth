@@ -5,18 +5,29 @@ import Login from './components/login'
 import PrivateRoute from './components/PrivateRoute';
 import Friends from './components/friends';
 import FriendForm from './components/friendform';
+import { axiosWithAuth } from './components/axiosWithAuth'
 function App() {
 
   const logout = () => {
+    axiosWithAuth()
+      .post('api/logout')
+      .then(res => {
+        localStorage.removeItem('token')
+        window.location.href = '/login'
+
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
   }
   return (
     <Router>
       <div className="App">
 
-        <Link to="/login">Login</Link>
-        <Link to="/friends">Friends</Link>
-
+        <Link to="/login">Login   </Link>
+        <Link to="/friends">Friends   </Link>
+        <Link onClick={logout}>Logout</Link>
         <Switch>
           <Route path='/login' component={Login} />
           <PrivateRoute exact path="/friends" component={Friends} />
